@@ -2,7 +2,7 @@ const bcrypt = require('bcryptjs');
 
 const jwt = require('jsonwebtoken');
 
-const User = require('../../models/User/user');
+const User = require('../../models/User/User');
 const RefreshToken = require('../../models/refreshToken');
 
 module.exports = async function (obj, { loginKey, password, flag }, context, info) {

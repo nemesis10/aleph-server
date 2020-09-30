@@ -1,7 +1,7 @@
 const bcrypt = require('bcryptjs');
 const validator = require('validator');
 
-const User = require('../../models/User/user');
+const User = require('../../models/User/User');
 
 module.exports = async function (obj, { userInput }, context, info) {
     const errors = [];
