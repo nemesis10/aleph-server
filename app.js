@@ -8,7 +8,7 @@ const jwt = require('jsonwebtoken');
 const schema = require('./graphql/schema');
 const graphqlResolver = require('./graphql/resolvers');
 const auth = require('./middleware/auth');
-const socket = require('../04-backend-deleting-posts-across-clients/04-backend-deleting-posts-across-clients/socket');
+const socket = require('./socket');
 
 const MONGODB_URI = `mongodb+srv://sonika:sonika@aleph-eomsd.mongodb.net/aleph?retryWrites=true&w=majority`;
 
