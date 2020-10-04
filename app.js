@@ -8,6 +8,7 @@ const jwt = require('jsonwebtoken');
 const schema = require('./graphql/schema');
 const graphqlResolver = require('./graphql/resolvers');
 const auth = require('./middleware/auth');
+const socket = require('../04-backend-deleting-posts-across-clients/04-backend-deleting-posts-across-clients/socket');
 
 const MONGODB_URI = `mongodb+srv://sonika:sonika@aleph-eomsd.mongodb.net/aleph?retryWrites=true&w=majority`;
 
@@ -50,26 +51,27 @@ app.get('/', (request, response, next) => {
 
 app.use(
     '/graphql',
-    graphqlHttp({
+    graphqlHttp(req => ({
         schema: schema,
-        // rootValue: graphqlResolver,
+        context: { req: req },
         graphiql: true,
-        // customFormatErrorFn: (error) => ({
-        //     message: error.message,
-        //     locations: error.locations,
-        //     stack: error.stack ? error.stack.split('\n') : [],
-        //     path: error.path,
-        // })
-        formatError(err) {
-            if (!err.originalError) {
-                return err;
-            }
-            const data = err.originalError.data;
-            const message = err.message || 'An error occurred.';
-            const code = err.originalError.code || 500;
-            return { message: message, status: code, data: data };
-        }
+        customFormatErrorFn: (error) => ({
+            message: error.message,
+            locations: error.locations,
+            stack: error.stack ? error.stack.split('\n') : [],
+            path: error.path,
+        })
+        // formatError(err) {
+        //     if (!err.originalError) {
+        //         return err;
+        //     }
+        //     const data = err.originalError.data;
+        //     const message = err.message || 'An error occurred.';
+        //     const code = err.originalError.code || 500;
+        //     return { message: message, status: code, data: data };
+        // }
     })
+    )
 );
 
 app.use((error, req, res, next) => {
@@ -86,6 +88,10 @@ mongoose
     )
     .then(result => {
         console.log("DB connected successfully!!!!!!");
-        app.listen(3001);
+        const server = app.listen(3001);
+        const io = require('./socket').init(server);
+        io.on('connection', socket => {
+            console.log('client connected');
+        });
     })
     .catch(err => console.log(err));
