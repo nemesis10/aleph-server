@@ -1,16 +1,18 @@
-const { makeExecutableSchema } = require('@graphql-tools/schema');
-const { mergeTypeDefs } = require('@graphql-tools/merge');
+const { makeExecutableSchema } = require("@graphql-tools/schema");
+const { mergeTypeDefs } = require("@graphql-tools/merge");
 
-const resolvers = require('./resolvers');
+const resolvers = require("./resolvers");
 
-const loginUserSchema = require('./schema/loginUserSchema');
-const createUserSchema = require('./schema/createUserSchema');
-const createPostSchema = require('./schema/createPostSchema');
-const getPostsSchema = require('./schema/getPostsSchema');
+const loginUserSchema = require("./schema/loginUserSchema");
+const createUserSchema = require("./schema/createUserSchema");
+const createPostSchema = require("./schema/createPostSchema");
+const getPostsSchema = require("./schema/getPostsSchema");
 
-const sendOtp = require('./schema/sendOtpSchema');
-const resendOtp = require('./schema/resendOtpSchema');
-const verifyOtp = require('./schema/verifyOtpSchema');
+const groupSchema = require("./schema/groupSchema");
+
+const sendOtp = require("./schema/sendOtpSchema");
+const resendOtp = require("./schema/resendOtpSchema");
+const verifyOtp = require("./schema/verifyOtpSchema");
 
 const addCreationBucketSchema = require('./schema/profile/creationBucket/addCreationBucketSchema');
 const getCreationBucketSchema = require('./schema/profile/creationBucket/getCreationBucketSchema');
@@ -33,6 +35,7 @@ const types = [
     sendOtp,
     verifyOtp,
     resendOtp,
+    groupSchema,
     addCreationBucketSchema,
     getCreationBucketSchema,
     addProfile,
@@ -50,9 +53,6 @@ const types = [
 const typeDefs = mergeTypeDefs(types, { all: true });
 
 module.exports = makeExecutableSchema({
-    typeDefs,
-    resolvers
+  typeDefs,
+  resolvers,
 });
-
-
-
