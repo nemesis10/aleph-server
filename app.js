@@ -10,7 +10,7 @@ const graphqlResolver = require("./graphql/resolvers");
 const auth = require("./middleware/auth");
 const socket = require("./socket");
 
-const MONGODB_URI = `mongodb://127.0.0.1:27017/aleph-backend?retryWrites=true&w=majority`;
+const MONGODB_URI = `mongodb+srv://sonika:sonika@aleph-eomsd.mongodb.net/aleph?retryWrites=true&w=majority`;
 
 const app = express(); // create express server
 
