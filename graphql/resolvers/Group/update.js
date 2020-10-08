@@ -22,7 +22,7 @@ exports.changeAdmin = (root, { groupId, userId, remove }) => {
   return Group.updateOne(
     { _id: groupId, users: { $elemMatch: { user: userId } } },
     {
-      $set: { "users.$.isAdmin": Boolean(remove) },
+      $set: { "users.$.isAdmin": Boolean(!remove) },
     }
   ).exec();
 };

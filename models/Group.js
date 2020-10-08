@@ -16,6 +16,20 @@ const groupSchema = new Schema({
       isAdmin: { type: Boolean, default: false },
     },
   ],
+  groupType: {
+    type: String,
+    enum: ["open", "closed", "secret"],
+    required: true,
+  },
+  inviteCode: {
+    type: String,
+    required: true,
+  },
+  mute: {
+    type: Boolean,
+    required: true,
+    default: false,
+  },
   description: {
     type: String,
     required: true,
@@ -24,13 +38,6 @@ const groupSchema = new Schema({
     type: Schema.Types.Date,
     default: Date,
   },
-
-  //   posts: [
-  //     {
-  //       type: Schema.Types.ObjectId,
-  //       ref: "posts",
-  //     },
-  //   ],
 });
 
 module.exports = mongoose.model("Group", groupSchema);
