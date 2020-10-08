@@ -21,17 +21,23 @@ module.exports = `
             photo:String!,
             users:[GroupUser!],
             description:String!,
-            timestamp:String!
+            timestamp:String!,
+            inviteCode:String!,
+            groupType:String!
+            mute:Boolean!
         }
         input newGroupInputData {
             name:String!,
             photo:String!,
             description:String!,
+            groupType:String!,
         }
         input updateGroupInputData {
             name:String,
             photo:String,
             description:String,
+            groupType:String,
+            mute:Boolean
         }
        
 `;
