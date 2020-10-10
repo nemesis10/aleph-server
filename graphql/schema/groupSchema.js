@@ -1,14 +1,16 @@
 module.exports = `
         type Mutation {
-            createGroup(userInput: newGroupInputData!,userId:ID!):Group!,
+            createGroup(userInput: newGroupInputData!):Group!,
             updateGroup(groupId:ID!,userInput: updateGroupInputData!):Group!,
             addUserToGroup(groupId:ID!,userId:[ID!]!):Group,
+            addUserViaCode(code:String!):Group!,
             removeUserFromGroup(groupId:ID!,userId:ID!):Group,
+            revokeGroupCode(groupId:ID!):String,
             changeGroupAdmin(groupId:ID!,userId:ID!,remove:Boolean!):Group,
-            deleteGroup(groupId:ID!,userId:ID!):Boolean
+            deleteGroup(groupId:ID!):Boolean
         }
         type Query {
-            getGroups(userId:ID!):[Group],
+            getGroups:[Group],
             getGroup(groupId:ID!):Group
         }
         type GroupUser {
@@ -28,8 +30,8 @@ module.exports = `
         }
         input newGroupInputData {
             name:String!,
-            photo:String!,
-            description:String!,
+            photo:String,
+            description:String,
             groupType:String!,
         }
         input updateGroupInputData {

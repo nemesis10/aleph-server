@@ -8,11 +8,15 @@ const groupSchema = new Schema({
   },
   photo: {
     type: String,
-    required: true,
   },
   users: [
     {
-      user: { type: Schema.Types.ObjectId, ref: "User", required: true },
+      user: {
+        type: Schema.Types.ObjectId,
+        ref: "User",
+        required: true,
+        unique: true,
+      },
       isAdmin: { type: Boolean, default: false },
     },
   ],
@@ -32,7 +36,7 @@ const groupSchema = new Schema({
   },
   description: {
     type: String,
-    required: true,
+    // required: true,
   },
   timestamp: {
     type: Schema.Types.Date,
