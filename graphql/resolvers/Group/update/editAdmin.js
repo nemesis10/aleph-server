@@ -1,9 +1,9 @@
-const Group = require("./../../../models/Group");
-const { invalidString } = require("../../../util/validate");
+const Group = require("./../../../../models/Group");
+const { invalidString } = require("../../../../util/validate");
 
-module.exports = async (root, { groupId }, context) => {
+module.exports = async (root, { groupId, userId, remove }, context) => {
   let { req } = context;
-  req.isAuth = true;
+
   if (process.env.DEV) req.userId = "5f6c9d362d6631017c08d9ad";
 
   if (!req.isAuth && !process.env.DEV) {
@@ -31,5 +31,10 @@ module.exports = async (root, { groupId }, context) => {
     error.code = 422;
     throw error;
   }
-  return Group.findByIdAndDelete(groupId);
+  return Group.updateOne(
+    { _id: groupId, users: { $elemMatch: { user: userId } } },
+    {
+      $set: { "users.$.isAdmin": Boolean(!remove) },
+    }
+  ).exec();
 };
