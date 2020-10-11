@@ -8,9 +8,8 @@ exports.one = (root, { groupId }) => {
 exports.all = (root, {}, context) => {
   let { req } = context;
   req.isAuth = true;
-  if (process.env.DEV) req.userId = "5f6c9d362d6631017c08d9ad";
 
-  if (!req.isAuth && !process.env.DEV) {
+  if (!req.isAuth) {
     const error = new Error("Not authenticated!");
     error.code = 401;
     throw error;

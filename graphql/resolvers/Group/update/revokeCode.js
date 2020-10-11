@@ -1,12 +1,12 @@
 const Group = require("./../../../../models/Group");
 
 const { invalidString } = require("../../../../util/validate");
+const newInviteCode = require("../../../../util/newInviteCode");
 
 module.exports = async (root, { groupId }, context) => {
   let { req } = context;
-  if (process.env.DEV) req.userId = "5f6c9d362d6631017c08d9ad";
 
-  if (!req.isAuth && !process.env.DEV) {
+  if (!req.isAuth) {
     const error = new Error("Not authenticated!");
     error.code = 401;
     throw error;
@@ -31,9 +31,7 @@ module.exports = async (root, { groupId }, context) => {
     error.code = 422;
     throw error;
   }
-  let newInviteCode = (
-    new Date().getTime() - -Math.floor(Math.random() * 10e4)
-  ).toString(36);
-  Group.findByIdAndUpdate(groupId, { inviteCode: newInviteCode });
-  return newInviteCode;
+  let inviteCode = newInviteCode();
+  Group.findByIdAndUpdate(groupId, { inviteCode });
+  return inviteCode;
 };

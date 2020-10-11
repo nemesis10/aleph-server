@@ -1,7 +1,8 @@
-const Group = require("./../../../../models/Group");
+const Classroom = require("./../../../../models/Classroom");
+
 const { invalidString } = require("../../../../util/validate");
 
-module.exports = async (root, { groupId, userId, remove }, context) => {
+module.exports = async (root, { classroomId, userId }) => {
   let { req } = context;
 
   if (!req.isAuth) {
@@ -10,13 +11,13 @@ module.exports = async (root, { groupId, userId, remove }, context) => {
     throw error;
   }
   const errors = [];
-  if (invalidString(groupId)) {
-    errors.push({ message: "Group ID is invalid." });
+  if (invalidString(classroomId)) {
+    errors.push({ message: "Classroom ID is invalid." });
   }
 
   const adminId = req.userId;
-  const groupUsers = await Group.find({ _id: groupId });
-  const isUserAdmin = groupUsers[0].users.some(({ user, isAdmin }) => {
+  const classroomUsers = await Classroom.find({ _id: classroomId });
+  const isUserAdmin = classroomUsers[0].users.some(({ user, isAdmin }) => {
     return isAdmin && user.toString() === adminId.toString();
   });
   if (!isUserAdmin) {
@@ -29,10 +30,7 @@ module.exports = async (root, { groupId, userId, remove }, context) => {
     error.code = 422;
     throw error;
   }
-  return Group.updateOne(
-    { _id: groupId, users: { $elemMatch: { user: userId } } },
-    {
-      $set: { "users.$.isAdmin": Boolean(!remove) },
-    }
-  ).exec();
+  return Classroom.findByIdAndUpdate(classroomId, {
+    $pull: { users: { $elemMatch: { user: userId } } },
+  }).exec();
 };
