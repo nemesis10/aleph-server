@@ -4,9 +4,8 @@ const { invalidString } = require("../../../../util/validate");
 //---------------------------------------------------------
 exports.byCode = (root, { code }, context) => {
   let { req } = context;
-  if (process.env.DEV) req.userId = "5f6c9d362d6631017c08d9ad";
 
-  if (!req.isAuth && !process.env.DEV) {
+  if (!req.isAuth) {
     const error = new Error("Not authenticated!");
     error.code = 401;
     throw error;
@@ -34,9 +33,7 @@ exports.byCode = (root, { code }, context) => {
 exports.byAdmin = async (root, { groupId, userId }, context) => {
   let { req } = context;
 
-  if (process.env.DEV) req.userId = "5f6c9d362d6631017c08d9ad";
-
-  if (!req.isAuth && !process.env.DEV) {
+  if (!req.isAuth) {
     const error = new Error("Not authenticated!");
     error.code = 401;
     throw error;

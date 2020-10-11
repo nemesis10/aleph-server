@@ -18,6 +18,7 @@ const updateCreationBucket = require("./resolvers/profile/creationBucket/updateC
 const getAchievement = require("./resolvers/profile/achievement/getAchievementResolver");
 const updateAchievement = require("./resolvers/profile/achievement/updateAchievementResolver");
 const groupResolver = require("./resolvers/Group");
+const classroomResolver = require("./resolvers/Classroom");
 
 module.exports = {
   Query: {
@@ -26,25 +27,17 @@ module.exports = {
     resendOtp: resendOtp,
     verifyOtp: verifyOtp,
     getPosts: getPosts,
-    getGroups: groupResolver.get.all,
-    getGroup: groupResolver.get.one,
+
     getCreationBucket: getCreationBucket,
     getProfile: getProfile,
     getAchievement: getAchievement,
     //hello: () => { return "ss"; }
+    ...groupResolver.Query,
+    ...classroomResolver.Query,
   },
   Mutation: {
     createUser: createUser,
     createPost: createPost,
-
-    createGroup: groupResolver.create,
-    updateGroup: groupResolver.update,
-    changeGroupAdmin: groupResolver.editAdmin,
-    revokeGroupCode: groupResolver.revokeCode,
-    addUserToGroup: groupResolver.addUser.byAdmin,
-    addUserViaCode: groupResolver.addUser.byCode,
-    removeUserFromGroup: groupResolver.removeUser,
-    deleteGroup: groupResolver.delete,
 
     addCreationBucket: addCreationBucket,
     addProfile: addProfile,
@@ -55,29 +48,8 @@ module.exports = {
     addGoodAt: addGoodAt,
     updateCreationBucket: updateCreationBucket,
     updateAchievement: updateAchievement,
+
+    ...groupResolver.Mutation,
+    ...classroomResolver.Mutation,
   },
 };
-
-// module.exports = {
-//   Query: {
-//     loginUser: loginUser,
-//     sendOtp: sendOtp,
-//     resendOtp: resendOtp,
-//     verifyOtp: verifyOtp,
-//     getPosts: getPosts,
-//     //hello: () => { return "ss"; }
-//     getGroups: groupResolver.get.all,
-//     getGroup: groupResolver.get.one,
-//   },
-//   Mutation: {
-//     createUser: createUser,
-//     createPost: createPost,
-
-//     createGroup: groupResolver.create,
-//     updateGroup: groupResolver.update.group,
-//     addUserToGroup: groupResolver.update.addUser,
-//     removeUserFromGroup: groupResolver.update.deleteUser,
-//     changeGroupAdmin: groupResolver.update.changeAdmin,
-//     deleteGroup: groupResolver.delete,
-//   },
-// };

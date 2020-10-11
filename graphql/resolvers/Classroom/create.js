@@ -1,11 +1,11 @@
-const Group = require("./../../../models/Group");
+const Classroom = require("./../../../models/Classroom");
+const User = require("./../../../models/User/User");
 const { invalidString } = require("../../../util/validate");
 const newInviteCode = require("../../../util/newInviteCode");
 
 module.exports = async (root, { userInput }, context) => {
   let { req } = context;
-  req.isAuth = true;
-  req.userId = "5f6c9d362d6631017c08d9ad";
+
   if (!req.isAuth) {
     const error = new Error("Not authenticated!");
     error.code = 401;
@@ -13,7 +13,14 @@ module.exports = async (root, { userInput }, context) => {
   }
   const errors = [];
   if (invalidString(userInput.name)) {
-    errors.push({ message: "Group Name is invalid." });
+    errors.push({ message: "Classroom Name is invalid." });
+  }
+
+  const userId = req.userId;
+  const user = await User.findById(userId).exec();
+  // Check creator type
+  if (!["teacher", "institute"].includes(user.userType)) {
+    errors.push({ message: "User is not teacher or institute." });
   }
   if (errors.length > 0) {
     const error = new Error("Invalid input.");
@@ -21,17 +28,12 @@ module.exports = async (root, { userInput }, context) => {
     error.code = 422;
     throw error;
   }
-  const userId = req.userId;
-
   Object.assign(userInput, {
-    users: [
-      {
-        user: userId,
-        isAdmin: true,
-      },
-    ],
+    participants: {
+      teachers: [userId],
+    },
     inviteCode: newInviteCode(),
   });
-  const newGroup = new Group(userInput);
-  return newGroup.save();
+  const newClassroom = new Classroom(userInput);
+  return newClassroom.save();
 };
