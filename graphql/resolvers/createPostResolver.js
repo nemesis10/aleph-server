@@ -6,8 +6,6 @@ const Post = require('../../models/post');
 
 module.exports = async function (obj, { postInput }, context, info) {
     req = context.req;
-    req.isAuth = true;
-    req.userId = "5f6c9d362d6631017c08d9ad";
     if (!req.isAuth) {
         const error = new Error('Not authenticated!');
         error.code = 401;

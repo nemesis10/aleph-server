@@ -35,7 +35,7 @@ module.exports = async function (obj, { loginKey, password, flag }, context, inf
             username: user.username
         },
         'somesupersecretsecret',
-        { expiresIn: '1min' }
+        { expiresIn: '30d' }
     );
     const refreshToken = jwt.sign(
         {
