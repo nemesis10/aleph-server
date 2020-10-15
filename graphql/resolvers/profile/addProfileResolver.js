@@ -1,7 +1,7 @@
 const Profile = require('../../../models/profile/profile');
 const CreationBucket = require('../../../models/profile/creationBucket');
 const Achievement = require('../../../models/profile/achievement');
-const user = require('../../../models/User/user');
+// const user = require('../../../models/User/user');
 // const user = require('../../../models/User/user');
 
 module.exports = async function(obj, { userInput }, context, info){
