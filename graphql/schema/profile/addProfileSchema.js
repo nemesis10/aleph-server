@@ -56,6 +56,12 @@ module.exports = `
             activity: String!,
             category: String!
         }
+        input inputCreationBucket {
+            creationName: String!,
+            creationType: String!,
+            creationLink: String!,
+            creationDescription: String!
+        }
 
         input ProfileInputData {
             userId: String!,
@@ -65,9 +71,6 @@ module.exports = `
             favPeople: [inputFavPeople],
             favQuotes: [inputFavQuotes],
             goodAt: [inputGoodAt],
-            creationName: String,
-            creationType: String,
-            creationLink: String,
-            creationDescription: String
+            creationBuckets: [inputCreationBucket]
         }
 `;
