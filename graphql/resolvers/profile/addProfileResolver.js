@@ -17,15 +17,17 @@ module.exports = async function(obj, { userInput }, context, info){
         goodAt: userInput.goodAt
     });
     
-    let creationBucket = new CreationBucket({
-        userId: userInput.userId,
-        creationName: userInput.creationName,
-        type: userInput.creationType,
-        linkToPdfPhoto: userInput.creationLink,
-        description: userInput.creationDescription
-    });
-    profile.creationBucket.push(creationBucket);
-    creationBucket.save();
+    for(i=0;i<userInput.creationBuckets.length;i++){
+        let creationBucket = new CreationBucket({
+            userId: userInput.userId,
+            creationName: userInput.creationBuckets[i].creationName,
+            type: userInput.creationBuckets[i].creationType,
+            linkToPdfPhoto: userInput.creationBuckets[i].creationLink,
+            description: userInput.creationBuckets[i].creationDescription
+        });
+        profile.creationBucket.push(creationBucket);
+        creationBucket.save();
+    }
     
     var i;
     for(i=0;i<userInput.achievements.length;i++){
