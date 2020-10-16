@@ -44,7 +44,7 @@ router.get("/", (req, res, next) => {
           _id: doc._id,
           request: {
             type: "GET",
-            url: "http://localhost:3001/audiobooks/" + doc._id
+            url: "https://aleph-server.vercel.app/audiobooks/" + doc._id
           }
         }
       })
@@ -91,7 +91,7 @@ router.post("/", upload.fields([{name: 'audio', maxcount: 1}, {name: 'srtfile', 
         _id: result._id,
         request: {
           type: "GET",
-          url: "http://localhost:3001/audiobooks/" + result._id
+          url: "https://aleph-server.vercel.app/audiobooks/" + result._id
         }
       }
     });
@@ -119,7 +119,7 @@ router.get("/:bookID", (req, res, next) => {
         audiobook: doc,
         request: {
           type: "GET",
-          url: "http://localhost:3001/audiobooks"
+          url: "https://aleph-server.vercel.app/audiobooks"
         }
       });
     } else {
@@ -148,10 +148,10 @@ router.patch("/:bookID", (req, res, next) => {
   .exec()
   .then(result => {
     res.status(200).json({
-      message: "Aduiobook updated!",
+      message: "Audiobook updated!",
       request: {
         type: "GET",
-        url: "http://localhost:3001/audiobooks" + id
+        url: "https://aleph-server.vercel.app/audiobooks" + id
       }
     });
   })
@@ -172,7 +172,7 @@ router.delete("/:bookID", (req, res, next) => {
       message: "Audiobook deleted!",
       request: {
         type: "POST",
-        url: "http://loclahost:3001/audiobooks",
+        url: "https://aleph-server.vercel.app/audiobooks",
         body: { title: "String", description: "String", author: "String" }
       }
     });
