@@ -11,7 +11,7 @@ const storage = multer.diskStorage({
     var dir = "./uploads/audiobook"
 
     if(!fs.existsSync(dir)) {
-      fs.mkdirSync(dir);
+      fs.mkdirSync(dir, {recursive: true});
     }
 
     cb(null, dir);
@@ -22,12 +22,15 @@ const storage = multer.diskStorage({
 
 });
 
+
+
 const upload = multer({storage: storage});
+
 
 router.get("/", (req, res, next) => {
   Audiobook.find()
 
-  .select("title description author _id audio srtfile category")
+  .select("title description author _id audio srtfile category views")
   .exec()
 
   .then(docs => {
@@ -41,10 +44,11 @@ router.get("/", (req, res, next) => {
           category: doc.category,
           audio: doc.audio,
           srtfile: doc.srtfile,
+          views: doc.views,
           _id: doc._id,
           request: {
             type: "GET",
-            url: "https://aleph-server.vercel.app/audiobooks/" + doc._id
+            url: "https://aleph-server.vercel.app/audiobooks" + doc._id
           }
         }
       })
@@ -67,10 +71,8 @@ router.post("/", upload.fields([{name: 'audio', maxcount: 1}, {name: 'srtfile', 
     author: req.body.author,
     category: req.body.category,
     audio: req.files['audio'][0].path,
-    srtfile: req.files['srtfile'][0].path
-    // audio: req.audio.path,
-    // srtfile: req.srtfile.path
-    // srtfile: req.file.path
+    srtfile: req.files['srtfile'][0].path,  
+
   });
 
   audiobook
@@ -88,10 +90,11 @@ router.post("/", upload.fields([{name: 'audio', maxcount: 1}, {name: 'srtfile', 
         category: result.category,
         audio: req.files['audio'][0].originalname,
         srtfile: req.files['srtfile'][0].originalname,
+        views: result.views,
         _id: result._id,
         request: {
           type: "GET",
-          url: "https://aleph-server.vercel.app/audiobooks/" + result._id
+          url: "https://aleph-server.vercel.app/audiobooks" + result._id
         }
       }
     });
@@ -105,11 +108,13 @@ router.post("/", upload.fields([{name: 'audio', maxcount: 1}, {name: 'srtfile', 
 });
 
 router.get("/:bookID", (req, res, next) => {
+
+
   const id = req.params.bookID;
 
-  Audiobook.findById(id)
+  Audiobook.findOneAndUpdate({ _id: id }, { $inc: { views: 1 } }, {new: true })
 
-  .select("title description author _id category audio srtfile")
+  .select("title description author _id category audio srt views")
   .exec()
 
   .then(doc => {
@@ -127,6 +132,8 @@ router.get("/:bookID", (req, res, next) => {
         message: "No valid entry found for provided audiobook ID."
       });
     }
+
+
 
   })
 
@@ -165,7 +172,7 @@ router.patch("/:bookID", (req, res, next) => {
 
 router.delete("/:bookID", (req, res, next) => {
   const id = req.params.bookID;
-  Audiobook.deleteOne({_id: id})
+  Audiobook.remove({_id: id})
   .exec()
   .then(result => {
     res.status(200).json({
@@ -184,6 +191,5 @@ router.delete("/:bookID", (req, res, next) => {
     });
   });
 });
-
 
 module.exports = router;

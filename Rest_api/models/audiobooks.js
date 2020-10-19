@@ -23,8 +23,13 @@ const audiobookSchema = mongoose.Schema({
   },
   srtfile: {
     type: String
+  },
+  views: {
+    type: Number,
+    default: 0
   }
 
 });
+
 
 module.exports = mongoose.model("Audiobook", audiobookSchema);

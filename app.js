@@ -10,6 +10,8 @@ const graphqlResolver = require("./graphql/resolvers");
 const auth = require("./middleware/auth");
 const socket = require("./socket");
 const audiobookRoutes = require("./Rest_api/routes/audiobooks");
+const mostViewedRoutes = require("./Rest_api/routes/mostViewed");
+const categoryRoutes = require("./Rest_api/routes/category");
 
 const MONGODB_URI = `mongodb+srv://sonika:sonika@aleph-eomsd.mongodb.net/aleph?retryWrites=true&w=majority`;
 
@@ -18,8 +20,11 @@ const app = express(); // create express server
 app.use(bodyParser.json()); // use body-parser middleware to parse incoming json
 
 app.use("/audiobooks", audiobookRoutes);
+app.use("/mostViewed", mostViewedRoutes);
+app.use("/category", categoryRoutes);
 
 app.use("/uploads/audiobook",express.static("uploads/audiobook"));
+app.use(express.static('./static'));
 
 const corsOptions = {
   origin: "*",
